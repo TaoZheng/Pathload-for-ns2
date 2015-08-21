@@ -1,0 +1,60 @@
+README FILE FOR PATHCHIRP NS-2 CODE
+===================================
+
+NOTE: <NS-2 DIR> refers to your ns-2.* directory, for example ns-2.27.
+
+1) Adding code to ns-2
+
+a) Save existing ns files that will be overwritten just in case you want to
+  revert to original code.
+
+	cd <NS-2 DIR>
+	tar -cvf original.tar Makefile.in FILES tcl/lib/ns-default.tcl tcl/lib/ns-packet.tcl common/packet.h 
+
+If at any point in the future you want to revert to your original code run
+the following.
+
+	cd <NS-2 DIR>
+	tar -xvf original.tar 
+	make clean
+	./configure
+	make depend
+	make
+
+
+b) Untar pathChirp code
+
+	cd <NS-2 DIR>
+	tar -xvf pathChirp.tar
+	make clean
+	./configure
+	make depend
+	make
+
+
+2) Running the example
+
+The file ./pathChirp_tcl/pathChirp.tcl contains a simple 4 node example.
+See the file for details about how to use pathChirp.
+
+		0---------1---------2
+		  1Gbps   |  10Mbps
+			  |
+			  | 1Gbps			
+			  |
+                          3
+pathChirp runs from 0 to 2 and a CBR source between 3 and 2. The CBR (5Mbps)
+source is on only from time 50s to 100s in the simulation.
+
+On running
+
+	./ns ./pathChirp_tcl/pathChirp.tcl > av_bw.out
+
+we get the pathChirp available bandwidth information in av_bw.out.
+The data format is
+
+<time stamp> <available bandwidth(Mbps)>
+
+To test if the output is as expected run the following:
+
+	diff av_bw.out av_bw_expected.out
